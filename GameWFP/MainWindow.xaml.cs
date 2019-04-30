@@ -95,12 +95,7 @@ namespace GameWFP
             // TODO: Some temporary code that helps debugging
             _statusMessage = $"Mouse.x: {mp.X}, mouse.y: {mp.Y}";
 
-            string homeColor = Location.Area == FieldArea.GreenHome ? "green" :
-                Location.Area == FieldArea.YellowHome ? "yellow" :
-                Location.Area == FieldArea.BlueHome ? "blue" :
-                Location.Area == FieldArea.RedHome ? "red" : "no";
-
-            _statusMessage += $"{Environment.NewLine}You clicked on the {homeColor} home.";
+            _statusMessage += $"{Environment.NewLine}{Location.Area.ToString()}: {Location.Position}";
             StatusBox.Text = _statusMessage;
         }
 
@@ -154,29 +149,10 @@ namespace GameWFP
         }
     }
 
-    /// <summary>
-    /// Camp class for each player
-    /// </summary>
-    public class Camp
-    {
-        private Pawn[] _spots;
-
-        public Camp(PlayerColor color)
-        {
-            _spots = new Pawn[4];
-
-            for (int i = 0; i < _spots.Length; i++)
-            {
-                //_spots[i] = new Pawn(color);
-            }
-        }
-    }
-
     public class Player
     {
         PlayerColor Color { get; set; }
         Pawn[] _pawns;
-
 
         public Player(PlayerColor color)
         {

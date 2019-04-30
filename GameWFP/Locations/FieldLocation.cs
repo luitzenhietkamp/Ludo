@@ -8,7 +8,7 @@ namespace GameWFP
     public class FieldLocation
     {
         public FieldArea Area { get; set; }
-        int Position { get; set; }  // TODO: add checks
+        public int Position { get; set; }  // TODO: add checks
 
         public FieldLocation(FieldArea area, int position)
         {
@@ -54,9 +54,41 @@ namespace GameWFP
             else if (mousePosition.X > 427 && mousePosition.X < 556
                 && mousePosition.Y > 33 && mousePosition.Y < 291)
             {
-                Vector offset = new Vector(427, 33);
-                mousePosition.X -= offset.X;
-                mousePosition.Y -= offset.Y;
+                Point offset = new Point(427, 291);
+                Point BoxCoords = new Point(
+                    x: - (mousePosition.Y - offset.Y),
+                    y: mousePosition.X - offset.X);
+                SetTop((int)BoxCoords.X / 43 + 6 * ((int)BoxCoords.Y / 43));
+            }
+            // Right box
+            else if (mousePosition.X > 556 && mousePosition.X < 814
+                && mousePosition.Y > 291 && mousePosition.Y < 420)
+            {
+                Point offset = new Point(556, 291);
+                Point BoxCoords = new Point(
+                    x: mousePosition.X - offset.X,
+                    y: mousePosition.Y - offset.Y);
+                SetRight((int)BoxCoords.X / 43 + 6 * ((int)BoxCoords.Y / 43));
+            }
+            // Bottom box
+            else if (mousePosition.X > 427 && mousePosition.X < 556
+                && mousePosition.Y > 420 && mousePosition.Y < 678)
+            {
+                Point offset = new Point(556, 420);
+                Point BoxCoords = new Point(
+                    x: mousePosition.Y - offset.Y,
+                    y: -(mousePosition.X - offset.X));
+                SetBottom((int)BoxCoords.X / 43 + 6 * ((int)BoxCoords.Y / 43));
+            }
+            // Left box
+            else if (mousePosition.X > 169 && mousePosition.X < 427
+                && mousePosition.Y > 291 && mousePosition.Y < 420)
+            {
+                Point offset = new Point(427, 420);
+                Point BoxCoords = new Point(
+                    x: -(mousePosition.X - offset.X),
+                    y: -(mousePosition.Y - offset.Y));
+                SetLeft((int)BoxCoords.X / 43 + 6 * ((int)BoxCoords.Y / 43));
             }
             // Player did not click on any active element
             else
