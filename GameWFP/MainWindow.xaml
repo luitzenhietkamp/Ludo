@@ -1,0 +1,42 @@
+﻿<Window x:Class="GameWFP.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GameWFP"
+        mc:Ignorable="d"
+        Title="Welcome to Ludo!" Height="750" Width="850">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.5*" />
+            <ColumnDefinition Width="7*" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="1">
+            <Button Background="Transparent" BorderBrush="Transparent" Click="Field_Click">
+                <StackPanel>
+                    <Image Source="pack://application:,,,/Images/background.png" />
+                </StackPanel>
+            </Button>
+        </Grid>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" VerticalAlignment="Center">
+                <Button Background="Transparent" BorderBrush="Transparent" Margin="10 0 0 0" Click="RollDie_Click">
+                    <StackPanel>
+                        <Image Source="pack://application:,,,/images/die.png" />
+                        <TextBlock HorizontalAlignment="Center">Roll die</TextBlock>
+                    </StackPanel>
+                </Button>
+
+            </StackPanel>
+            <StackPanel Grid.Row="1">
+                <TextBlock Margin="10 3 0 0" TextWrapping="Wrap" x:Name="TurnInfo" />
+                <TextBlock Margin="10 3 0 0" TextWrapping="Wrap" x:Name="StatusBox">Welcome to the game. Green starts the game. To start the game, please roll the die.</TextBlock>
+            </StackPanel>
+        </Grid>
+
+    </Grid>
+</Window>
