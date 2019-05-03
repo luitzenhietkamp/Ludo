@@ -47,7 +47,7 @@ namespace GameWFP
         {
             _rng = new Random();
             _activePlayer = 0;
-            _numberOfPLayers = 2;
+            _numberOfPLayers = 3;
             _currentPhase = Phase.RollDie;
             _players = new Player[4] {
                 new Player(PlayerColor.green, FieldCanvas),
