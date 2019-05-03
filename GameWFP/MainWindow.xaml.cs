@@ -25,6 +25,7 @@ namespace GameWFP
         int Die { get; set; }
         string _statusMessage;
         int _activePlayer;
+        int _numberOfPLayers;
         Phase _currentPhase;
         Player[] _players;
         static FieldArea[] _starts = { FieldArea.GreenHome, FieldArea.YellowHome, FieldArea.BlueHome, FieldArea.RedHome };
@@ -46,6 +47,7 @@ namespace GameWFP
         {
             _rng = new Random();
             _activePlayer = 0;
+            _numberOfPLayers = 2;
             _currentPhase = Phase.RollDie;
             _players = new Player[4] {
                 new Player(PlayerColor.green, FieldCanvas),
@@ -107,8 +109,6 @@ namespace GameWFP
                 return;
             }
 
-            // If there are no available moves, a player forfeits their turn
-
             // Get the position of the mouse
             var mp = Mouse.GetPosition(Application.Current.MainWindow);
 
@@ -138,8 +138,16 @@ namespace GameWFP
                     _currentPhase = Phase.RollDie;
                     if (Die != 6)
                     {
-                        ++_activePlayer;    // move to the next player
-                        _activePlayer %= 4; // move back to the first player, if needed
+                        // In two player games, make sure that two players play on opposing sides of the board
+                        if (_numberOfPLayers == 2)
+                        {
+                            _activePlayer = _activePlayer == 0 ? 2 : 0;
+                        }
+                        else
+                        {
+                            ++_activePlayer;    // move to the next player
+                            _activePlayer %= _numberOfPLayers; // move back to the first player, if needed
+                        }
                     }
                     _statusMessage = $"{ActivePlayerString()}{Environment.NewLine}Please roll the die to continue.";
                     StatusBox.Text = _statusMessage;
