@@ -24,7 +24,6 @@ namespace GameWFP
             Position = location.Position;
         }
 
-        // TODO: Implement checks
         // TODO: Clean up magic numbers
         public FieldLocation(Point mousePosition)
         {
@@ -197,6 +196,14 @@ namespace GameWFP
             {
                 Position = 17 - square;
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (Area == ((FieldLocation)obj).Area && Position == ((FieldLocation)obj).Position)
+                return true;
+
+            return false;
         }
 
         #endregion

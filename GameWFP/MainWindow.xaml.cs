@@ -96,7 +96,6 @@ namespace GameWFP
         /// <param name="e"></param>
         private void Field_Click(object sender, RoutedEventArgs e)
         {
-
             // If a player has completed the game, all clicks will be ignored
             if (_currentPhase == Phase.GameOver) return;
 
@@ -163,18 +162,18 @@ namespace GameWFP
         /// <returns></returns>
         private bool AttemptMove(Player player, FieldLocation location)
         {
-            // If the clicked location does not contain a player piece, return false
-            if (!player.HasPieceIn(location))
-                return false;
-
             // Calculate the new position
             var newLocation = player.CalculateMove(location, Die);
+
+            // If the clicked location does not contain a player piece, return false
+            if (!player.HasPieceIn(location) || Equals(location, newLocation))
+                return false;
 
             // Don't move if the player already has a piece in the new location
             if (player.HasPieceIn(newLocation))
                 return false;
 
-            // Move the piecee
+            // Move the piece
             player.MovePiece(location, newLocation);
 
             // Remove opponent piece, if needed
