@@ -7,6 +7,8 @@ namespace GameWFP
     /// </summary>
     public class FieldLocation
     {
+        private int _cellWidth = 43;
+
         public FieldArea Area { get; set; }
         public int Position { get; set; }  // TODO: add checks
 
@@ -16,9 +18,14 @@ namespace GameWFP
             Position = position;
         }
 
+        public FieldLocation(FieldLocation location)
+        {
+            Area = location.Area;
+            Position = location.Position;
+        }
+
         // TODO: Implement checks
         // TODO: Clean up magic numbers
-        // TODO: > or >= ?
         public FieldLocation(Point mousePosition)
         {
             // Green start
@@ -58,7 +65,7 @@ namespace GameWFP
                 Point BoxCoords = new Point(
                     x: - (mousePosition.Y - offset.Y),
                     y: mousePosition.X - offset.X);
-                SetTop((int)BoxCoords.X / 43 + 6 * ((int)BoxCoords.Y / 43));
+                SetTop((int)BoxCoords.X / _cellWidth + 6 * ((int)BoxCoords.Y / _cellWidth));
             }
             // Right box
             else if (mousePosition.X > 556 && mousePosition.X < 814
@@ -68,7 +75,7 @@ namespace GameWFP
                 Point BoxCoords = new Point(
                     x: mousePosition.X - offset.X,
                     y: mousePosition.Y - offset.Y);
-                SetRight((int)BoxCoords.X / 43 + 6 * ((int)BoxCoords.Y / 43));
+                SetRight((int)BoxCoords.X / _cellWidth + 6 * ((int)BoxCoords.Y / _cellWidth));
             }
             // Bottom box
             else if (mousePosition.X > 427 && mousePosition.X < 556
@@ -78,7 +85,7 @@ namespace GameWFP
                 Point BoxCoords = new Point(
                     x: mousePosition.Y - offset.Y,
                     y: -(mousePosition.X - offset.X));
-                SetBottom((int)BoxCoords.X / 43 + 6 * ((int)BoxCoords.Y / 43));
+                SetBottom((int)BoxCoords.X / _cellWidth + 6 * ((int)BoxCoords.Y / _cellWidth));
             }
             // Left box
             else if (mousePosition.X > 169 && mousePosition.X < 427
@@ -88,7 +95,7 @@ namespace GameWFP
                 Point BoxCoords = new Point(
                     x: -(mousePosition.X - offset.X),
                     y: -(mousePosition.Y - offset.Y));
-                SetLeft((int)BoxCoords.X / 43 + 6 * ((int)BoxCoords.Y / 43));
+                SetLeft((int)BoxCoords.X / _cellWidth + 6 * ((int)BoxCoords.Y / _cellWidth));
             }
             // Player did not click on any active element
             else

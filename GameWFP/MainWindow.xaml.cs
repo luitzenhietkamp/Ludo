@@ -26,6 +26,8 @@ namespace GameWFP
         int _activePlayer;
         Phase _currentPhase;
         Player[] _players;
+        static FieldArea[] _starts = { FieldArea.GreenHome, FieldArea.YellowHome, FieldArea.BlueHome, FieldArea.RedHome };
+        static FieldArea[] _finishes = { FieldArea.GreenFinish, FieldArea.YellowFinish, FieldArea.BlueFinish, FieldArea.RedFinish };
 
         public MainWindow()
         {
@@ -45,13 +47,20 @@ namespace GameWFP
             _activePlayer = 0;
             _currentPhase = Phase.RollDie;
             _players = new Player[4] {
-                new Player(PlayerColor.green),
-                new Player(PlayerColor.yellow),
-                new Player(PlayerColor.blue),
-                new Player(PlayerColor.red)
+                new Player(PlayerColor.green, FieldCanvas),
+                new Player(PlayerColor.yellow, FieldCanvas),
+                new Player(PlayerColor.blue, FieldCanvas),
+                new Player(PlayerColor.red, FieldCanvas)
             };
 
-            TurnInfo.Text = $"It's {_activePlayer.ToString()}'s turn";
+            foreach (var item in _players)
+            {
+                item.Show(FieldCanvas);
+            }
+
+            //_statusMessage = $"{Background.ActualHeight}, {Background.ActualWidth}";
+            StatusBox.Text = _statusMessage;
+
         }
 
         #region Click handlers
@@ -86,82 +95,88 @@ namespace GameWFP
         /// <param name="e"></param>
         private void Field_Click(object sender, RoutedEventArgs e)
         {
+
+            // If a player has completed the game, all clicks will be ignored
+            if (_currentPhase == Phase.GameOver) return;
+
+            // Only let the player move his piece after rolling the dice.
+            if (_currentPhase != Phase.ChooseMove)
+            {
+                _statusMessage = $"{ActivePlayerString()}{Environment.NewLine}You cannot move a piece, please roll the die.";
+                StatusBox.Text = _statusMessage;
+                return;
+            }
+
             // Get the position of the mouse
             var mp = Mouse.GetPosition(Application.Current.MainWindow);
 
             // Find the location that corresponds to the position of the mouse
-            FieldLocation Location = new FieldLocation(mp);
+            FieldLocation location = new FieldLocation(mp);
 
-            // TODO: Some temporary code that helps debugging
-            _statusMessage = $"Mouse.x: {mp.X}, mouse.y: {mp.Y}";
+            // If player can make a move, move
+            if(_players[_activePlayer].HasPieceIn(location) && AttemptMove(_players[_activePlayer], location))
+            {
+                // First check if the game is over
+                if (_players[_activePlayer].HasWon())
+                {
+                    _currentPhase = Phase.GameOver;
+                    _statusMessage = $"Congratulations, you have won the game. The {_players[_activePlayer]} player is the winner.";
+                    StatusBox.Text = _statusMessage;
+                }
+                else    // update the game
+                {
+                    // Update the screen
+                    _players[_activePlayer].Show(FieldCanvas);
 
-            _statusMessage += $"{Environment.NewLine}{Location.Area.ToString()}: {Location.Position}";
-            StatusBox.Text = _statusMessage;
+                    _currentPhase = Phase.RollDie;
+                    ++_activePlayer;    // move to the next player
+                    _activePlayer %= 4; // move back to the first player, if needed
+                    _statusMessage = $"{ActivePlayerString()}{Environment.NewLine}Please roll the die to continue.";
+                    StatusBox.Text = _statusMessage;
+                }
+            }
+            else
+            {
+                // Notify user of invalid move
+                _statusMessage = $"{ActivePlayerString()}{Environment.NewLine}Invalid move, you cannot move that piece or do not have a piece at that position";
+                StatusBox.Text = _statusMessage;
+            }
         }
 
         #endregion
-    }
 
-    /// <summary>
-    /// All possible player colors
-    /// </summary>
-    public enum PlayerColor
-    {
-        green,
-        yellow,
-        blue,
-        red,
-        none
-    }
-
-    /// <summary>
-    /// Possible phases the game can be in
-    /// </summary>
-    public enum Phase
-    {
-        RollDie,
-        ChooseMove,
-        GameOver
-    }
-
-    /// <summary>
-    /// Stores information for each pawn
-    /// </summary>
-    public class Pawn
-    {
-        PlayerColor Color { get; }
-
-        FieldLocation Location { get; set; }
-
-        public Pawn(PlayerColor color, int position)
+        /// <summary>
+        /// Method that will attempt to move a piece and report the caller whether it was succesful
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        private bool AttemptMove(Player player, FieldLocation location)
         {
-            Color = color;
-            if (color == PlayerColor.green)
-                Location = new FieldLocation(FieldArea.GreenHome, position);
-            else if (color == PlayerColor.yellow)
-                Location = new FieldLocation(FieldArea.YellowHome, position);
-            else if (color == PlayerColor.blue)
-                Location = new FieldLocation(FieldArea.BlueHome, position);
-            else if (color == PlayerColor.red)
-                Location = new FieldLocation(FieldArea.RedHome, position);
-            else
-                throw new Exception("Invalid color for pawn.");
-        }
-    }
+            // If the clicked location does not contain a player piece, return false
+            if (!player.HasPieceIn(location))
+                return false;
 
-    public class Player
-    {
-        PlayerColor Color { get; set; }
-        Pawn[] _pawns;
+            // Calculate the new position
+            var newLocation = player.CalculateMove(location, Die);
 
-        public Player(PlayerColor color)
-        {
-            _pawns = new Pawn[4];
+            // Don't move if the player already has a piece in the new location
+            if (player.HasPieceIn(newLocation))
+                return false;
 
-            for (int i = 0; i < _pawns.Length; i++)
+            // Move the piecee
+            player.MovePiece(location, newLocation);
+
+            // Remove opponent piece, if needed
+            foreach (var item in _players)
             {
-                _pawns[i] = new Pawn(color, i);
+                //item.RemovePiece(newLocation);
             }
+
+            return true;
+        }
+        public string ActivePlayerString()
+        {
+            return $"It's {_activePlayer.ToString()}'s turn.";
         }
     }
 }

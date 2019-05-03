@@ -63,6 +63,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GeneralLogic\Pawn.cs" />
+    <Compile Include="GeneralLogic\Phase.cs" />
+    <Compile Include="GeneralLogic\Player.cs" />
+    <Compile Include="GeneralLogic\PlayerColor.cs" />
     <Compile Include="Locations\FieldArea.cs" />
     <Compile Include="Locations\FieldLocation.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -103,7 +107,15 @@
     <Resource Include="Images\die.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GeneralLogic\" />
+    <Resource Include="Images\red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\pawns.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\blue.png" />
+    <Resource Include="Images\green.png" />
+    <Resource Include="Images\yellow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

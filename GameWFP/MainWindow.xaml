@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:GameWFP"
         mc:Ignorable="d"
         Title="Welcome to Ludo!" Height="750" Width="850">
     <Grid>
@@ -11,12 +10,11 @@
             <ColumnDefinition Width="1.5*" />
             <ColumnDefinition Width="7*" />
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="1">
-            <Button Background="Transparent" BorderBrush="Transparent" Click="Field_Click">
-                <StackPanel>
-                    <Image Source="pack://application:,,,/Images/background.png" />
-                </StackPanel>
-            </Button>
+        <Grid Grid.Column="1" MouseDown="Field_Click">
+            <Grid.Background>
+                <ImageBrush ImageSource="pack://application:,,,/Images/background.png" />
+            </Grid.Background>
+            <Canvas x:Name="FieldCanvas" />
         </Grid>
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
@@ -33,7 +31,6 @@
 
             </StackPanel>
             <StackPanel Grid.Row="1">
-                <TextBlock Margin="10 3 0 0" TextWrapping="Wrap" x:Name="TurnInfo" />
                 <TextBlock Margin="10 3 0 0" TextWrapping="Wrap" x:Name="StatusBox">Welcome to the game. Green starts the game. To start the game, please roll the die.</TextBlock>
             </StackPanel>
         </Grid>
