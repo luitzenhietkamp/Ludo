@@ -59,6 +59,10 @@ namespace GameWFP
             fieldCanvas.Children.Add(i);
         }
 
+        /// <summary>
+        /// Converts the location of a piece to grid coordinates
+        /// </summary>
+        /// <returns></returns>
         public Point GridCoords()
         {
             Point coords = new Point();
@@ -538,12 +542,17 @@ namespace GameWFP
             return coords;
         }
 
+        /// <summary>
+        /// Shows the current position of the piece on the screen
+        /// </summary>
+        /// <param name="canvas"></param>
         public void Show(Canvas canvas)
         {
             Point p = GridCoords();
 
             Canvas.SetTop(i, p.Y);
             Canvas.SetLeft(i, p.X);
+            i.UpdateLayout();
         }
     }
 }

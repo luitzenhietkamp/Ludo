@@ -10,13 +10,41 @@ namespace GameWFP
     {
         public PlayerColor Color { get; set; }
         public Pawn[] _pawns;
+        public FieldArea _start;
+        public FieldArea _finish;
 
         static FieldArea[] _starts = { FieldArea.GreenHome, FieldArea.YellowHome, FieldArea.BlueHome, FieldArea.RedHome };
         static FieldArea[] _finishes = { FieldArea.GreenFinish, FieldArea.YellowFinish, FieldArea.BlueFinish, FieldArea.RedFinish };
 
+        /// <summary>
+        /// Constructor that sets up the color and pawns for a player and draws each pawn to the screen
+        /// </summary>
+        /// <param name="color"></param>
+        /// <param name="fieldCanvas"></param>
         public Player(PlayerColor color, Canvas fieldCanvas)
         {
             Color = color;
+            if (color == PlayerColor.green)
+            {
+                _start = FieldArea.GreenHome;
+                _finish = FieldArea.GreenFinish;
+            }
+            if (color == PlayerColor.yellow)
+            {
+                _start = FieldArea.YellowHome;
+                _finish = FieldArea.YellowFinish;
+            }
+            if (color == PlayerColor.blue)
+            {
+                _start = FieldArea.BlueHome;
+                _finish = FieldArea.BlueFinish;
+            }
+            if (color == PlayerColor.red)
+            {
+                _start = FieldArea.RedHome;
+                _finish = FieldArea.RedFinish;
+            }
+
             _pawns = new Pawn[4];
 
             for (int i = 0; i < _pawns.Length; i++)
@@ -172,11 +200,48 @@ namespace GameWFP
             }
         }
 
+        /// <summary>
+        /// Will display the player's pieces to the screen
+        /// </summary>
+        /// <param name="canvas"></param>
         public void Show(Canvas canvas)
         {
             foreach (var item in _pawns)
             {
                 item.Show(canvas);
+            }
+        }
+
+        /// <summary>
+        /// Removes the piece from the board that is at the specified location and sends it
+        /// back to the player's home
+        /// </summary>
+        /// <param name="location"></param>
+        public void RemovePiece(FieldLocation location)
+        {
+            // Find the piece at the specified location
+            foreach (var item in _pawns)
+            {
+                // If the Area and Position match, the piece is at the specified location
+                if (item.Location.Area == location.Area && item.Location.Position == location.Position)
+                {
+                    // Find a free spot in the player's home
+                    for (int i = 0; i < _pawns.Length; i++)
+                    {
+                        // If there are not any pieces that are in position i and that are not at home
+                        // (pieces at the start of the board will not be confused for pieces being in the home)
+                        // then spot is available
+                        if (!_pawns.Any(p => p.Location.Position == i && p.Location.Area == _start))
+                        {
+                            // Put the piece back in the player's home
+                            item.Location.Area = _start;
+
+                            // Put the piece in the correct position in the player home
+                            item.Location.Position = i;
+                            return;
+                        }
+                    }
+                }
             }
         }
     }

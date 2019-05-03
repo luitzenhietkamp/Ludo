@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace GameWFP
 {
@@ -58,7 +59,7 @@ namespace GameWFP
                 item.Show(FieldCanvas);
             }
 
-            //_statusMessage = $"{Background.ActualHeight}, {Background.ActualWidth}";
+            _statusMessage = $"{ActivePlayerString()}{Environment.NewLine}Please roll the die to continue.";
             StatusBox.Text = _statusMessage;
 
         }
@@ -107,6 +108,8 @@ namespace GameWFP
                 return;
             }
 
+            // If there are no available moves, a player forfeits their turn
+
             // Get the position of the mouse
             var mp = Mouse.GetPosition(Application.Current.MainWindow);
 
@@ -126,7 +129,12 @@ namespace GameWFP
                 else    // update the game
                 {
                     // Update the screen
-                    _players[_activePlayer].Show(FieldCanvas);
+                    foreach (var item in _players)
+                    {
+                        item.Show(FieldCanvas);
+                    }
+
+                    FieldCanvas.Dispatcher.Invoke(delegate { }, DispatcherPriority.Render);
 
                     _currentPhase = Phase.RollDie;
                     ++_activePlayer;    // move to the next player
@@ -169,14 +177,17 @@ namespace GameWFP
             // Remove opponent piece, if needed
             foreach (var item in _players)
             {
-                //item.RemovePiece(newLocation);
+                // Only check opponents
+                if (item.Color != player.Color)
+                    item.RemovePiece(newLocation);
             }
 
             return true;
         }
         public string ActivePlayerString()
         {
-            return $"It's {_activePlayer.ToString()}'s turn.";
+            string[] player_strings = { "green", "yellow", "blue", "red" };
+            return $"It's {player_strings[_activePlayer]}'s turn.";
         }
     }
 }
