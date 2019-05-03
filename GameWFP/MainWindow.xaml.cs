@@ -137,8 +137,11 @@ namespace GameWFP
                     FieldCanvas.Dispatcher.Invoke(delegate { }, DispatcherPriority.Render);
 
                     _currentPhase = Phase.RollDie;
-                    ++_activePlayer;    // move to the next player
-                    _activePlayer %= 4; // move back to the first player, if needed
+                    if (Die != 6)
+                    {
+                        ++_activePlayer;    // move to the next player
+                        _activePlayer %= 4; // move back to the first player, if needed
+                    }
                     _statusMessage = $"{ActivePlayerString()}{Environment.NewLine}Please roll the die to continue.";
                     StatusBox.Text = _statusMessage;
                 }
