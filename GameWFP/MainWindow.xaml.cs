@@ -179,7 +179,9 @@ namespace GameWFP
 
             // Don't move if the player already has a piece in the new location
             if (player.HasPieceIn(newLocation))
-                return false;
+                // unless the new location is a final location
+                if(!newLocation.IsFinal())
+                    return false;
 
             // Move the piece
             player.MovePiece(location, newLocation);
@@ -194,6 +196,11 @@ namespace GameWFP
 
             return true;
         }
+
+        /// <summary>
+        /// Represents the currently active player as a string indicating its color
+        /// </summary>
+        /// <returns></returns>
         public string ActivePlayerString()
         {
             string[] player_strings = { "green", "yellow", "blue", "red" };

@@ -186,6 +186,11 @@ namespace GameWFP
                     coords.X = 338;
                     coords.Y = 244;
                 }
+                if (Location.Position == 6)
+                {
+                    coords.X = 338;
+                    coords.Y = 287;
+                }
             }
             if (Location.Area == FieldArea.BlueFinish)
             {
@@ -212,6 +217,11 @@ namespace GameWFP
                 if (Location.Position == 5)
                 {
                     coords.X = 420;
+                    coords.Y = 338;
+                }
+                if (Location.Position == 6)
+                {
+                    coords.X = 387;
                     coords.Y = 338;
                 }
             }
@@ -242,6 +252,11 @@ namespace GameWFP
                     coords.X = 338;
                     coords.Y = 428;
                 }
+                if (Location.Position == 5)
+                {
+                    coords.X = 338;
+                    coords.Y = 385;
+                }
             }
             if (Location.Area == FieldArea.GreenFinish)
             {
@@ -268,6 +283,11 @@ namespace GameWFP
                 if (Location.Position == 5)
                 {
                     coords.X = 247;
+                    coords.Y = 338;
+                }
+                if (Location.Position == 5)
+                {
+                    coords.X = 290;
                     coords.Y = 338;
                 }
             }

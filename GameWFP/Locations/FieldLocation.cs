@@ -206,6 +206,51 @@ namespace GameWFP
             return false;
         }
 
+        /// <summary>
+        /// Will return whether the location is a home location
+        /// </summary>
+        /// <returns></returns>
+        public bool IsHome ()
+        {
+            if (Area == FieldArea.GreenHome ||
+                Area == FieldArea.YellowHome ||
+                Area == FieldArea.BlueHome ||
+                Area == FieldArea.RedHome)
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Will return whether the location is a finish location
+        /// </summary>
+        /// <returns></returns>
+        public bool IsFinish()
+        {
+            if (Area == FieldArea.GreenFinish ||
+                Area == FieldArea.YellowFinish ||
+                Area == FieldArea.BlueFinish ||
+                Area == FieldArea.RedFinish)
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Will return whether the location is a final location
+        /// </summary>
+        /// <returns></returns>
+        public bool IsFinal()
+        {
+            if (Area == FieldArea.GreenFinish ||
+                Area == FieldArea.YellowFinish ||
+                Area == FieldArea.BlueFinish ||
+                Area == FieldArea.RedFinish)
+                return Position == 6 ? true : false;
+
+            return false;
+        }
+
         #endregion
     }
 }
