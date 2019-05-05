@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace GameWFP
@@ -21,6 +10,7 @@ namespace GameWFP
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Custom private fields
         Random _rng;
         int Die { get; set; }
         string _statusMessage;
@@ -30,6 +20,8 @@ namespace GameWFP
         Player[] _players;
         static FieldArea[] _starts = { FieldArea.GreenHome, FieldArea.YellowHome, FieldArea.BlueHome, FieldArea.RedHome };
         static FieldArea[] _finishes = { FieldArea.GreenFinish, FieldArea.YellowFinish, FieldArea.BlueFinish, FieldArea.RedFinish };
+
+        #endregion
 
         public MainWindow()
         {
@@ -176,7 +168,9 @@ namespace GameWFP
             var newLocation = player.CalculateMove(location, Die);
 
             // If the clicked location does not contain a player piece, return false
-            if (!player.HasPieceIn(location) || Equals(location, newLocation))
+            // Second condition prevents the game from getting stuck when a player only has pawns left
+            // that can move to their initial position in the end zone.
+            if (!player.HasPieceIn(location) && !Equals(location, newLocation))
                 return false;
 
             // Don't move if the player already has a piece in the new location
