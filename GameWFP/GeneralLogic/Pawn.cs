@@ -285,7 +285,7 @@ namespace GameWFP
                     coords.X = 247;
                     coords.Y = 338;
                 }
-                if (Location.Position == 5)
+                if (Location.Position == 6)
                 {
                     coords.X = 290;
                     coords.Y = 338;

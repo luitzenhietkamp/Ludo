@@ -118,23 +118,24 @@ namespace GameWFP
             // If player can make a move, move
             if(_players[_activePlayer].HasPieceIn(location) && AttemptMove(_players[_activePlayer], location))
             {
-                // First check if the game is over
+                // Update the screen
+                foreach (var item in _players)
+                {
+                    item.Show(FieldCanvas);
+                }
+
+                // Make sure that the updated screen gets rendered now
+                FieldCanvas.Dispatcher.Invoke(delegate { }, DispatcherPriority.Render);
+
+                // Check if the game is over
                 if (_players[_activePlayer].HasWon())
                 {
                     _currentPhase = Phase.GameOver;
-                    _statusMessage = $"Congratulations, you have won the game. The {_players[_activePlayer]} player is the winner.";
+                    _statusMessage = $"Congratulations, you have won the game. The {ActivePlayerString()} player is the winner.";
                     StatusBox.Text = _statusMessage;
                 }
-                else    // update the game
+                else    // Update the game
                 {
-                    // Update the screen
-                    foreach (var item in _players)
-                    {
-                        item.Show(FieldCanvas);
-                    }
-
-                    FieldCanvas.Dispatcher.Invoke(delegate { }, DispatcherPriority.Render);
-
                     _currentPhase = Phase.RollDie;
                     if (Die != 6)
                     {
@@ -166,7 +167,8 @@ namespace GameWFP
         /// <summary>
         /// Method that will attempt to move a piece and report the caller whether it was succesful
         /// </summary>
-        /// <param name="location"></param>
+        /// <param name="player"></param>
+        /// <param name="location">Current location</param>
         /// <returns></returns>
         private bool AttemptMove(Player player, FieldLocation location)
         {

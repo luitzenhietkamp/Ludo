@@ -193,6 +193,7 @@ namespace GameWFP
                     // otherwise, if piece is in old location
                     (item.Location.Area == oldLocation.Area && item.Location.Position == oldLocation.Position))
                 {
+                    // update the location
                     item.Location.Area = newLocation.Area;
                     item.Location.Position = newLocation.Position;
                     return;
